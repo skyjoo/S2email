@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>회원가입 페이지</title>
+  <style>
+    .container {
+      width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="number"] {
+      width: 100%;
+      padding: 5px;
+    }
+    
+    button {
+      padding: 10px 20px;
+    }
+    
+    .message {
+      margin-top: 10px;
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>회원가입</h1>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="name">이름</label>
+        <input type="text" id="name" maxlength="20" required>
+      </div>
+      <div class="form-group">
+        <label for="birthYear">생년</label>
+        <input type="number" id="birthYear" min="1900" max="9999" required>
+        <input type="number" id="birthMonth" min="1" max="12" required>
+        <input type="number" id="birthDay" min="1" max="31" required>
+      </div>
+      <div class="form-group">
+        <label for="email">이메일</label>
+        <input type="email" id="email" maxlength="50" required>
+      </div>
+      <button type="button" onclick="verifyEmail()">인증하기</button>
+      <div id="verificationSection" style="display: none;">
+        <div class="form-group">
+          <label for="verificationCode">인증번호</label>
+          <input type="number" id="verificationCode" min="0" max="99999" required>
+          <button type="button" onclick="resendVerificationCode()">재전송</button>
+        </div>
+      </div>
+      <div id="messageSection" class="message"></div>
+    </form>
+  </div>
+
+  <script>
+    var verificationCode;
+    
+    function verifyEmail() {
+      var emailInput = document.getElementById("email");
+      var email = emailInput.value;
+      
+      // 기존 계정과 이메일 비교 로직 (예시에서는 단순히 랜덤으로 true 또는 false 반환)
+      var isExistingEmail = Math.random() < 0.5;
+      
+      if (isExistingEmail) {
+        showMessage("해당 이메일은 기존 계정의 이메일과 같습니다. 다시 한 번 확인해주세요.");
+      } else {
+        verificationCode = generateVerificationCode();
+        sendVerificationEmail(email, verificationCode);
+        showVerificationSection();
+      }
+    }
+    
+    function resendVerificationCode() {
+      var emailInput = document.getElementById("email");
+      var email = emailInput.value;
+      
+      verificationCode = generateVerificationCode();
+      sendVerificationEmail(email, verificationCode);
+      showMessage("인증번호가 다시 전송되었습니다.");
+    }
+    
+    function generateVerificationCode() {
+      return Math.floor(10000 + Math.random() * 90000);
+    }
+    
+    function sendVerificationEmail(email, code) {
+      // 이메일 전송 로직 (예시에서는 콘솔에 출력)
+      console.log("[Exhibition For U] 회원님의 인증번호는 " + code + "입니다.");
+    }
+    
+    function showVerificationSection() {
+      var verificationSection = document.getElementById("verificationSection");
+      verificationSection.style.display = "block";
+    }
+    
+    function showMessage(message) {
+      var messageSection = document.getElementById("messageSection");
+      messageSection.innerText = message;
+    }
+  </script>
+</body>
+</html>
